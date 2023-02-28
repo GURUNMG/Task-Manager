@@ -43,7 +43,7 @@ app.patch('/users/:id', async (req,res)=>{
   }
 })
 
-app.get('/user',(req, res)=>{
+app.get('/users',(req, res)=>{
   User.find({}).then((user)=>{
     res.send(user)
   }).catch((user)=>{
@@ -60,7 +60,7 @@ app.get('/users/:id', (req,res)=>{
     {
       return res.status(404).send("server down")
     }
-    res.send(user) //user found
+    res.status(201).send(user) //user found
 
   }).catch((err)=>{
     res.send("user not found in the registered database")
@@ -68,7 +68,6 @@ app.get('/users/:id', (req,res)=>{
 })
 
 app.post('/tasks',(req,res)=>{
-
   const task= new Task(req.body);
   console.log(req.body)
   
@@ -79,6 +78,28 @@ app.post('/tasks',(req,res)=>{
   })
 })
 
+
+app.get('/tasks',(req,res)=>{
+  Task.find({}).then((task)=>{
+      res.status(200).send(task);
+  }).catch((err)=>{
+    res.send("Fetching failed")
+  })
+})
+
+app.get('/tasks/:id', (req, res)=>{
+  const id=req.params.id;
+
+  Task.findById(id).then((task)=>{
+    if(!task)
+    {
+      return res.status(500).send("SERVER DOWN")
+    }
+    res.status(201).send(task);
+  }).catch((err)=>{
+    res.status(400).send("FAILED")
+  })
+})
 
 
 
