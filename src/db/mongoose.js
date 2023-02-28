@@ -71,14 +71,14 @@ const Task=mongoose.model('tasks',
  }
 })
 
-// const inser_t=new Task(
-//   {
-//     task_name:"CV project"
-//   }
-//     )
+const insert=new Task(
+  {
+    task_name:"CV project"
+  }
+    )
 
-// inser_t.save().then(()=>{
-//  console.log(inser_t)
-// }).catch((error)=>{
-//  console.log("Error")
-// })
+insert.save().then(()=>{
+ console.log(insert)
+}).catch((error)=>{
+ console.log("Error",error)
+})
