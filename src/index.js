@@ -89,7 +89,6 @@ app.get('/users/:id', async(req,res)=>{
     if(!user) return res.send("ERROR")
     res.status(200).send(user)
   }catch(e){
-
     res.status(400).send(e)
   }
 })
@@ -154,4 +153,25 @@ app.get('/tasks/:id', async(req, res)=>{
 
 app.listen(port,()=>{
   console.log("Server running")
+})
+
+// update the specific task
+app.patch('/tasks/:id', async(req, res)=>{
+  const updates=Object.keys(req.body)
+  const allowedupdates=['task_name','completed']
+  const isValidOperation=updates.every((update)=>{
+    return allowedupdates.includes(update)
+  })
+  if(!isValidOperation)
+  {
+    return res.status(400).send("Invalid update for the given fields")
+  }
+  try{
+    const task=await Task.findByIdAndUpdate(req.params.id,req.body,{new:true,runValidator:true})
+    
+    if(!task) return res.send("ERROR")
+    res.status(200).send(task)
+  }catch(e){
+    res.status(400).send(e)
+  }
 })
