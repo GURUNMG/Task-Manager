@@ -20,12 +20,12 @@ app.post('/users', async (req,res) => {
   // }catch(e){
   //   res.status(400).send(e)
   // }
-  
 
  user.save().then(() => {
   res.status(201).send(user)
   }).catch((err) =>{
-    console.log(err)
+    // console.log(err)
+    res.status(400).send("falied inserting")
   })
 })
 
@@ -43,6 +43,29 @@ app.patch('/users/:id', async (req,res)=>{
   }
 })
 
+app.get('/user',(req, res)=>{
+  User.find({}).then((user)=>{
+    res.send(user)
+  }).catch((user)=>{
+    res.send("Server down")
+  })
+})
+
+app.get('/users/:id', (req,res)=>{
+  // console.log(req.params.id);
+  const id=req.params.id;
+
+  User.findById(id).then((user)=>{
+    if(!user)
+    {
+      return res.status(404).send("server down")
+    }
+    res.send(user) //user found
+
+  }).catch((err)=>{
+    res.send("user not found in the registered database")
+  })
+})
 
 app.post('/tasks',(req,res)=>{
 
