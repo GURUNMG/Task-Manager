@@ -1,5 +1,6 @@
+//CONNECTION FILE 
 const mongoose=require('mongoose')
-const validator=require('validator')
+// const validator=require('validator')
 
 mongoose.connect('mongodb://127.0.0.1:27017/task-manager-api',{
  useNewUrlParser:true
@@ -58,27 +59,27 @@ mongoose.connect('mongodb://127.0.0.1:27017/task-manager-api',{
 //  console.log(error)
 // })
 
-const Task=mongoose.model('tasks',
-{
- task_name:{
-  type:String,
-  required:true,
-  trim:true
-  },
- completed:{
-  type:Boolean,
-  default:false
- }
-})
+// const Task=mongoose.model('tasks',
+// {
+//  task_name:{
+//   type:String,
+//   required:true,
+//   trim:true
+//   },
+//  completed:{
+//   type:Boolean,
+//   default:false
+//  }
+// })
 
-const insert=new Task(
-  {
-    task_name:"CV project"
-  }
-    )
+// const insert=new Task(
+//   {
+//     task_name:"CV project"
+//   }
+//     )
 
-insert.save().then(()=>{
- console.log(insert)
-}).catch((error)=>{
- console.log("Error",error)
-})
+// insert.save().then(()=>{
+//  console.log(insert)
+// }).catch((error)=>{
+//  console.log("Error",error)
+// })
