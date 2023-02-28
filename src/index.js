@@ -8,6 +8,7 @@ const port=process.env.PORT || 3001
 app=express();
 app.use(express.json())
 
+// create a new task
 app.post('/users', async (req,res) => {
 //  console.log(req.body)
 //  res.send("testing")
@@ -29,20 +30,7 @@ app.post('/users', async (req,res) => {
   // })
 })
 
-app.patch('/users/:id', async (req,res)=>{
-  // const user=new User(req.body)
-
-  try{
-    const user=await User.findByIdAndUpdate(req.params.id,req.body,{new:true,runValidator:true})
-    
-    if(!user) return res.send("ERROR")
-    res.status(200).send(user)
-  }catch(e){
-
-    res.status(400).send(e)
-  }
-})
-
+//  view all tasks
 app.get('/users', async(req, res)=>{
 
   try{
@@ -58,6 +46,7 @@ app.get('/users', async(req, res)=>{
   // })
 })
 
+// view a specific task
 app.get('/users/:id', async(req,res)=>{
   // console.log(req.params.id);
   const id=req.params.id;
@@ -82,6 +71,30 @@ app.get('/users/:id', async(req,res)=>{
   // })
 })
 
+// update the specific user
+ app.patch('/users/:id', async (req,res)=>{
+  // const user=new User(req.body)
+  const updates=Object.keys(req.body)
+  const allowedupdates=['name','email','password','age']
+  const isValidOperation=updates.every((update)=>{
+    return allowedupdates.includes(update)
+  })
+  if(!isValidOperation)
+  {
+    return res.status(400).send("Invalid update for the given fields")
+  }
+  try{
+    const user=await User.findByIdAndUpdate(req.params.id,req.body,{new:true,runValidator:true})
+    
+    if(!user) return res.send("ERROR")
+    res.status(200).send(user)
+  }catch(e){
+
+    res.status(400).send(e)
+  }
+})
+
+// create a new task
 app.post('/tasks',async(req,res)=>{
   const task= new Task(req.body);
   // console.log(req.body)
@@ -98,7 +111,7 @@ app.post('/tasks',async(req,res)=>{
   // })
 })
 
-
+// view all tasks
 app.get('/tasks',async (req,res)=>{
 
   try{
@@ -114,6 +127,7 @@ app.get('/tasks',async (req,res)=>{
   // })
 })
 
+// specific task
 app.get('/tasks/:id', async(req, res)=>{
   const id=req.params.id;
 
@@ -140,5 +154,4 @@ app.get('/tasks/:id', async(req, res)=>{
 
 app.listen(port,()=>{
   console.log("Server running")
-
 })
