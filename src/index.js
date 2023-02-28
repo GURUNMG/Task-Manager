@@ -93,6 +93,20 @@ app.get('/users/:id', async(req,res)=>{
   }
 })
 
+// delete a specific user
+app.delete('/user/:id',async(req, res)=>{
+  const id=req.params.id;
+
+  try{
+    const user=await User.findByIdAndDelete(id)
+
+    if(!user) return res.status(400).send("user not found")
+    res.status(200).send("user deleted")
+  } catch{
+    res.status(500).send("server error")
+  }
+})
+
 // create a new task
 app.post('/tasks',async(req,res)=>{
   const task= new Task(req.body);
@@ -109,6 +123,7 @@ app.post('/tasks',async(req,res)=>{
   //   res.status(400).send("Failed")
   // })
 })
+
 
 // view all tasks
 app.get('/tasks',async (req,res)=>{
@@ -173,5 +188,19 @@ app.patch('/tasks/:id', async(req, res)=>{
     res.status(200).send(task)
   }catch(e){
     res.status(400).send(e)
+  }
+})
+
+// delete a specific user
+app.delete('/task/:id',async(req, res)=>{
+  const id=req.params.id;
+
+  try{
+    const task=await Task.findByIdAndDelete(id)
+
+    if(!task) return res.status(400).send("task not found")
+    res.status(200).send("task deleted")
+  } catch{
+    res.status(500).send("server error")
   }
 })
