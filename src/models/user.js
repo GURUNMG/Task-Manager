@@ -42,7 +42,7 @@ const userSchema=new mongoose.Schema({
   }
  })
 
- userSchema.statics.findByCredentials = async(req,res)=>{
+ userSchema.statics.findEmail = async(email,password)=>{
   const user=await User.findOne({email})
 
   if(!user)
@@ -51,7 +51,7 @@ const userSchema=new mongoose.Schema({
   }
   const isMatch= await bcryt.compare(password, user.password)
 
-  if(!isMatch) throw new Error("unable to login");
+  if(!isMatch) throw new Error("wrong password");
   return user;
  }
 
