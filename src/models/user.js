@@ -1,6 +1,7 @@
 const mongoose= require('mongoose');
 const validator = require('validator');
 const bcryt=require('bcrypt')
+const jwt=require('jsonwebtoken')
 
 const userSchema=new mongoose.Schema({
   name:{ 
@@ -39,8 +40,25 @@ const userSchema=new mongoose.Schema({
       throw new Error("Age must be in positive number..")
     }
    }
-  }
+  },
+  tokens:[{
+    token:{
+      type:String,
+      required:true
+    }
+  }]
  })
+
+
+//  token generation
+ userSchema.methods.generateToken= async function(){
+  const user= this;
+  const token=jwt.sign({_id:user._id.toString()}, "this is guru")
+
+  user.tokens=user.tokens.concat({token})
+  await user.save()
+  return token;
+ }
 
  userSchema.statics.findEmail = async(email,password)=>{
   const user=await User.findOne({email})

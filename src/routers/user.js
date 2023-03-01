@@ -6,16 +6,15 @@ const User=require('../models/user')
 router.post('/users', async (req,res) => {
   //  console.log(req.body)
   //  res.send("testing")
-  
    const user =new User(req.body);
-    
     try{
       await user.save();
-      res.status(200).send(user);
+      const token= user.generateToken();
+
+      res.status(200).send({user,token});
     }catch(err){
       res.status(400).send(err);
     }
-  
     // user.save().then(() => {
     // res.status(201).send(user)
     // }).catch((err) =>{
@@ -107,12 +106,11 @@ router.post('/users', async (req,res) => {
   })
 
   router.post('/users/login', async(req, res)=>{
-    
     try{
       const user = await User.findEmail(req.body.email, req.body.password)
-                        //  User.findByCredentials(req.body.username, req.body.password);
+      const token= await user.generateToken()
       // const user = await User.find({email:req.body.email})
-      res.status(200).send(user)
+      res.status(200).send({user, token})
     }catch(err){
       res.status(400).send("wrong password")
     }
